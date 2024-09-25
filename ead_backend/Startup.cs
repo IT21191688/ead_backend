@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using ead_backend.Services.ServiceImpl;
 using ead_backend.Services;
 using ead_backend.Healpers;
+using System.Security.Claims;
 
 namespace ead_backend
 {
@@ -48,6 +49,14 @@ namespace ead_backend
             ClockSkew = TimeSpan.Zero
         };
     });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("VendorOrAdmin", policy =>
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c =>
+                            (c.Type == ClaimTypes.Role && (c.Value == "vendor" || c.Value == "admin")))));
+            });
 
             services.AddScoped<IEmailService, EmailService>();
 

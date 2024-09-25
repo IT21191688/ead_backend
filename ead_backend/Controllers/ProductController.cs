@@ -22,19 +22,20 @@ namespace ead_backend.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
-        [Authorize(Roles = "vendor")]
+
+        [HttpPost("create-product")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductCreateDto productDto)
         {
-            var vendorEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var vendor = await _userService.GetUserByEmailAsync(vendorEmail);
+            var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userService.GetUserByEmailAsync(userEmail);
 
-            if (vendor == null || vendor.Role.ToLower() != "vendor")
+            if (user == null || (user.Role.ToLower() != "vendor" && user.Role.ToLower() != "admin"))
             {
                 return this.CustomResponse(false, 403, "Unauthorized access", null);
             }
 
-            var createdProduct = await _productService.CreateProductAsync(productDto, vendor.Id.ToString());
+            var createdProduct = await _productService.CreateProductAsync(productDto, user.Id.ToString());
 
             if (createdProduct == null)
             {
@@ -43,11 +44,15 @@ namespace ead_backend.Controllers
 
             return this.CustomResponse(true, 201, "Product created successfully", createdProduct);
         }
-
-        [HttpPut("{productId}")]
-        [Authorize(Roles = "vendor,admin")]
+        [HttpPut("update-product/{productId}")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> UpdateProduct(string productId, [FromForm] ProductUpdateDto productDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.CustomResponse(false, 400, "Invalid input", ModelState);
+            }
+
             var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userService.GetUserByEmailAsync(userEmail);
 
@@ -66,7 +71,7 @@ namespace ead_backend.Controllers
             return this.CustomResponse(true, 200, "Product updated successfully", updatedProduct);
         }
 
-        [HttpDelete("{productId}")]
+        [HttpDelete("delete-product/{productId}")]
         [Authorize(Roles = "vendor")]
         public async Task<IActionResult> DeleteProduct(string productId)
         {
@@ -88,7 +93,7 @@ namespace ead_backend.Controllers
             return this.CustomResponse(true, 200, "Product deleted successfully", null);
         }
 
-        [HttpGet]
+        [HttpGet("get-all-products")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -96,7 +101,7 @@ namespace ead_backend.Controllers
             return this.CustomResponse(true, 200, "Products retrieved successfully", products);
         }
 
-        [HttpGet("{productId}")]
+        [HttpGet("get-one-product/{productId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetProduct(string productId)
         {

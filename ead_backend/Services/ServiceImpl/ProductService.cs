@@ -61,42 +61,59 @@ namespace ead_backend.Services.ServiceImpl
                 UpdatedAt = product.UpdatedAt
             };
         }
-
         public async Task<ProductDto> UpdateProductAsync(string productId, ProductUpdateDto productDto, string userId, string userRole)
         {
-            var product = await _products.Find(p => p.Id == MongoDB.Bson.ObjectId.Parse(productId)).FirstOrDefaultAsync();
+            var filter = Builders<Product>.Filter.Eq(p => p.Id, MongoDB.Bson.ObjectId.Parse(productId));
+            var product = await _products.Find(filter).FirstOrDefaultAsync();
 
             if (product == null || (userRole.ToLower() != "admin" && product.VendorId != userId))
             {
                 return null;
             }
 
+            var update = Builders<Product>.Update;
+            var updateDefinition = new List<UpdateDefinition<Product>>();
+
             if (productDto.Image != null)
             {
-                product.ImageUrl = await UploadImageToCloudinary(productDto.Image);
+                var imageUrl = await UploadImageToCloudinary(productDto.Image);
+                updateDefinition.Add(update.Set(p => p.ImageUrl, imageUrl));
             }
 
-            product.Name = productDto.Name ?? product.Name;
-            product.Description = productDto.Description ?? product.Description;
-            product.Price = productDto.Price ?? product.Price;
-            product.CategoryId = productDto.CategoryId ?? product.CategoryId;
-            product.IsActive = productDto.IsActive ?? product.IsActive;
-            product.UpdatedAt = DateTime.UtcNow;
+            if (productDto.Name != null)
+                updateDefinition.Add(update.Set(p => p.Name, productDto.Name));
 
-            await _products.ReplaceOneAsync(p => p.Id == product.Id, product);
+            if (productDto.Description != null)
+                updateDefinition.Add(update.Set(p => p.Description, productDto.Description));
+
+            if (productDto.Price.HasValue)
+                updateDefinition.Add(update.Set(p => p.Price, productDto.Price.Value));
+
+            if (productDto.CategoryId != null)
+                updateDefinition.Add(update.Set(p => p.CategoryId, productDto.CategoryId));
+
+            if (productDto.IsActive.HasValue)
+                updateDefinition.Add(update.Set(p => p.IsActive, productDto.IsActive.Value));
+
+            updateDefinition.Add(update.Set(p => p.UpdatedAt, DateTime.UtcNow));
+
+            var combinedUpdate = update.Combine(updateDefinition);
+            await _products.UpdateOneAsync(filter, combinedUpdate);
+
+            var updatedProduct = await _products.Find(filter).FirstOrDefaultAsync();
 
             return new ProductDto
             {
-                Id = product.Id.ToString(),
-                VendorId = product.VendorId,
-                Name = product.Name,
-                Description = product.Description,
-                ImageUrl = product.ImageUrl,
-                Price = product.Price,
-                CategoryId = product.CategoryId,
-                IsActive = product.IsActive,
-                CreatedAt = product.CreatedAt,
-                UpdatedAt = product.UpdatedAt
+                Id = updatedProduct.Id.ToString(),
+                VendorId = updatedProduct.VendorId,
+                Name = updatedProduct.Name,
+                Description = updatedProduct.Description,
+                ImageUrl = updatedProduct.ImageUrl,
+                Price = updatedProduct.Price,
+                CategoryId = updatedProduct.CategoryId,
+                IsActive = updatedProduct.IsActive,
+                CreatedAt = updatedProduct.CreatedAt,
+                UpdatedAt = updatedProduct.UpdatedAt
             };
         }
 
