@@ -11,6 +11,7 @@ namespace ead_backend.Model.Dtos
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
+        public int Qty { get; set; }
         public string CategoryId { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -23,6 +24,8 @@ namespace ead_backend.Model.Dtos
         public string Description { get; set; }
         public IFormFile Image { get; set; }
         public decimal Price { get; set; }
+
+        public int Qty { get; set; }
         public string CategoryId { get; set; }
     }
 
@@ -32,6 +35,8 @@ namespace ead_backend.Model.Dtos
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
         public decimal? Price { get; set; }
+
+        public int Qty { get; set; }
 
         public string? CategoryId { get; set; }
         public bool? IsActive { get; set; }

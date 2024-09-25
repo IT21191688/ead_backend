@@ -39,6 +39,7 @@ namespace ead_backend.Services.ServiceImpl
                 Description = productDto.Description,
                 ImageUrl = imageUrl,
                 Price = productDto.Price,
+                Qty = productDto.Qty,
                 CategoryId = productDto.CategoryId,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
@@ -55,6 +56,7 @@ namespace ead_backend.Services.ServiceImpl
                 Description = product.Description,
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
+                Qty = product.Qty,
                 CategoryId = product.CategoryId,
                 IsActive = product.IsActive,
                 CreatedAt = product.CreatedAt,
@@ -89,6 +91,9 @@ namespace ead_backend.Services.ServiceImpl
             if (productDto.Price.HasValue)
                 updateDefinition.Add(update.Set(p => p.Price, productDto.Price.Value));
 
+            if (productDto.Qty != null)
+                updateDefinition.Add(update.Set(p => p.Qty, productDto.Qty));
+
             if (productDto.CategoryId != null)
                 updateDefinition.Add(update.Set(p => p.CategoryId, productDto.CategoryId));
 
@@ -110,6 +115,7 @@ namespace ead_backend.Services.ServiceImpl
                 Description = updatedProduct.Description,
                 ImageUrl = updatedProduct.ImageUrl,
                 Price = updatedProduct.Price,
+                Qty = updatedProduct.Qty,
                 CategoryId = updatedProduct.CategoryId,
                 IsActive = updatedProduct.IsActive,
                 CreatedAt = updatedProduct.CreatedAt,
@@ -134,6 +140,7 @@ namespace ead_backend.Services.ServiceImpl
                 Description = p.Description,
                 ImageUrl = p.ImageUrl,
                 Price = p.Price,
+                Qty = p.Qty,
                 CategoryId = p.CategoryId,
                 IsActive = p.IsActive,
                 CreatedAt = p.CreatedAt,
@@ -154,6 +161,7 @@ namespace ead_backend.Services.ServiceImpl
                 Description = product.Description,
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
+                Qty= product.Qty,
                 CategoryId = product.CategoryId,
                 IsActive = product.IsActive,
                 CreatedAt = product.CreatedAt,
