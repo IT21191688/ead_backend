@@ -11,5 +11,6 @@ namespace ead_backend.Services
         Task<IEnumerable<OrderDto>> GetOrdersByCustomerIdAsync(string customerId);
         Task<OrderDto> UpdateOrderStatusAsync(string orderId, string newStatus);
         Task<OrderItemDto> UpdateOrderItemStatusAsync(string orderId, string orderItemId, string newStatus);
+        Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
     }
 }

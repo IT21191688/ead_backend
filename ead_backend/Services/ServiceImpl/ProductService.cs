@@ -14,11 +14,13 @@ namespace ead_backend.Services.ServiceImpl
     public class ProductService : IProductService
     {
         private readonly IMongoCollection<Product> _products;
+        private readonly IMongoCollection<Category> _categories;
         private readonly Cloudinary _cloudinary;
 
         public ProductService(MongoDbContext context, IConfiguration configuration)
         {
             _products = context.Products;
+            _categories = context.Categories;
 
             var cloudinaryAccount = new Account(
                 configuration["Cloudinary:CloudName"],
@@ -132,26 +134,47 @@ namespace ead_backend.Services.ServiceImpl
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
             var products = await _products.Find(_ => true).ToListAsync();
-            return products.Select(p => new ProductDto
+            var productDtos = new List<ProductDto>();
+
+            foreach (var product in products)
             {
-                Id = p.Id.ToString(),
-                VendorId = p.VendorId,
-                Name = p.Name,
-                Description = p.Description,
-                ImageUrl = p.ImageUrl,
-                Price = p.Price,
-                Qty = p.Qty,
-                CategoryId = p.CategoryId,
-                IsActive = p.IsActive,
-                CreatedAt = p.CreatedAt,
-                UpdatedAt = p.UpdatedAt
-            });
+                var category = await _categories.Find(c => c.Id == MongoDB.Bson.ObjectId.Parse(product.CategoryId)).FirstOrDefaultAsync();
+
+                productDtos.Add(new ProductDto
+                {
+                    Id = product.Id.ToString(),
+                    VendorId = product.VendorId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    ImageUrl = product.ImageUrl,
+                    Price = product.Price,
+                    Qty = product.Qty,
+                    CategoryId = product.CategoryId,
+                    IsActive = product.IsActive,
+                    CreatedAt = product.CreatedAt,
+                    UpdatedAt = product.UpdatedAt,
+                    Category = category == null ? null : new CategoryDto
+                    {
+                        Id = category.Id.ToString(),
+                        Name = category.Name,
+                        Description = category.Description,
+                        IsActive = category.IsActive,
+                        CreatedAt = category.CreatedAt,
+                        UpdatedAt = category.UpdatedAt
+                    }
+                });
+            }
+
+            return productDtos;
         }
+
 
         public async Task<ProductDto> GetProductByIdAsync(string productId)
         {
             var product = await _products.Find(p => p.Id == MongoDB.Bson.ObjectId.Parse(productId)).FirstOrDefaultAsync();
             if (product == null) return null;
+
+            var category = await _categories.Find(c => c.Id == MongoDB.Bson.ObjectId.Parse(product.CategoryId)).FirstOrDefaultAsync();
 
             return new ProductDto
             {
@@ -161,13 +184,23 @@ namespace ead_backend.Services.ServiceImpl
                 Description = product.Description,
                 ImageUrl = product.ImageUrl,
                 Price = product.Price,
-                Qty= product.Qty,
+                Qty = product.Qty,
                 CategoryId = product.CategoryId,
                 IsActive = product.IsActive,
                 CreatedAt = product.CreatedAt,
-                UpdatedAt = product.UpdatedAt
+                UpdatedAt = product.UpdatedAt,
+                Category = category == null ? null : new CategoryDto
+                {
+                    Id = category.Id.ToString(),
+                    Name = category.Name,
+                    Description = category.Description,
+                    IsActive = category.IsActive,
+                    CreatedAt = category.CreatedAt,
+                    UpdatedAt = category.UpdatedAt
+                }
             };
         }
+
 
         private async Task<string> UploadImageToCloudinary(Microsoft.AspNetCore.Http.IFormFile image)
         {

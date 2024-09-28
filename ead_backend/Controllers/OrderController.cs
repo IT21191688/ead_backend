@@ -99,5 +99,13 @@ namespace ead_backend.Controllers
 
             return this.CustomResponse(true, 200, "Order item status updated successfully", updatedOrderItem);
         }
+
+        [HttpGet("get-all-orders")]
+        public async Task<IActionResult> getAllOrders()
+        {
+            var orders = await _orderService.GetAllOrdersAsync();
+
+            return this.CustomResponse(true, 200, "Customer orders retrieved successfully", orders);
+        }
     }
 }
