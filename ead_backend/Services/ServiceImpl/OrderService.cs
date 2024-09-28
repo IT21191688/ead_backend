@@ -208,6 +208,19 @@ namespace ead_backend.Services.ServiceImpl
             return updatedOrder.OrderItems.FirstOrDefault(oi => oi.Id.ToString() == orderItemId); // Compare as string
         }
 
+        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        {
+            var orders = await _orders.Find(_ => true).ToListAsync(); // Retrieve all orders
+            var orderDtos = new List<OrderDto>();
+
+            foreach (var order in orders)
+            {
+                orderDtos.Add(await GetOrderByIdAsync(order.Id.ToString())); // Reuse the method to map each order to OrderDto
+            }
+
+            return orderDtos;
+        }
+
         private UserDto MapUserToDto(User user)
         {
             return new UserDto
