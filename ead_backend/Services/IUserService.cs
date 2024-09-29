@@ -30,5 +30,9 @@ namespace ead_backend.Services
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<bool> IsUserAdminAsync(string email);
         Task<bool> DeleteUserAsync(string email);
+        Task<User> UpdateUserStatusAsync(string userId, string status);
+
+
+
     }
 }

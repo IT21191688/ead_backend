@@ -122,6 +122,7 @@ namespace ead_backend.Services.ServiceImpl
             var users = await _users.Find(_ => true).ToListAsync();
             return users.Select(u => new UserDto
             {
+                id=u.Id.ToString(),
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
@@ -148,6 +149,19 @@ namespace ead_backend.Services.ServiceImpl
             var objectId = new ObjectId(userId);
             return await _users.Find(u => u.Id == objectId).FirstOrDefaultAsync();
         }
+
+        public async Task<User> UpdateUserStatusAsync(string userId, string status)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user == null) return null;
+
+            user.Status = status;
+
+            await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+
+            return user;
+        }
+
 
     }
 }
