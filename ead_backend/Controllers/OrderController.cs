@@ -73,7 +73,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPut("update-order-status/{orderId}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> UpdateOrderStatus(string orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
         {
             var updatedOrder = await _orderService.UpdateOrderStatusAsync(orderId, updateOrderStatusDto.OrderStatus);
@@ -87,7 +87,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPut("update-order-item-status/{orderId}/items/{orderItemId}")]
-        [Authorize(Roles = "vendor,admin")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> UpdateOrderItemStatus(string orderId, string orderItemId, [FromBody] UpdateOrderItemStatusDto updateOrderItemStatusDto)
         {
             var updatedOrderItem = await _orderService.UpdateOrderItemStatusAsync(orderId, orderItemId, updateOrderItemStatusDto.Status);

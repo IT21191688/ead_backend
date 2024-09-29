@@ -18,5 +18,7 @@ namespace ead_backend.Data
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
 
         public IMongoCollection<Order> Orders => _database.GetCollection<Order>("Orders");
+
+        public IMongoCollection<VendorRating> VendorRatings => _database.GetCollection<VendorRating>("VendorRatings");
     }
 }

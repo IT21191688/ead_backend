@@ -3,6 +3,7 @@ using ead_backend.Healpers;
 using ead_backend.Model;
 using ead_backend.Model.Dtos;
 using ead_backend.Services;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
@@ -141,5 +142,12 @@ namespace ead_backend.Services.ServiceImpl
             var result = await _users.DeleteOneAsync(u => u.Email == email);
             return result.DeletedCount > 0;
         }
+
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            var objectId = new ObjectId(userId);
+            return await _users.Find(u => u.Id == objectId).FirstOrDefaultAsync();
+        }
+
     }
 }
