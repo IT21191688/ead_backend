@@ -101,6 +101,29 @@ namespace ead_backend.Controllers
             return this.CustomResponse(true, 200, "Products retrieved successfully", products);
         }
 
+        [HttpGet("get-all-products-by-vendor")]
+        [Authorize(Roles = "vendor")]
+        public async Task<IActionResult> GetAllProductsByVendor()
+        { 
+            var vendorIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (vendorIdClaim == null)
+            {
+                return this.CustomResponse(false, 400, "Vendor ID not found in token", null);
+            }
+
+            var vendorId = vendorIdClaim.Value;
+
+            var products = await _productService.GetAllProductsByVendorAsync(vendorId);
+
+            if (products == null || !products.Any())
+            {
+                return this.CustomResponse(false, 404, "No products found for the vendor", null);
+            }
+
+            return this.CustomResponse(true, 200, "Products retrieved successfully", products);
+        }
+
         [HttpGet("get-one-product/{productId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetProduct(string productId)

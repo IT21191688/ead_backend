@@ -38,7 +38,7 @@ namespace ead_backend.Services
             var user = await _userService.AuthenticateUserAsync(email, password);
             if (user == null) return (false, "Invalid credentials.", null, null);
 
-            var token = _jwtHelper.GenerateJwtToken(user.Email, user.Role);
+            var token = _jwtHelper.GenerateJwtToken(user.Email, user.Role,user.Id.ToString());
 
             var userDetails = new UserDto
             {

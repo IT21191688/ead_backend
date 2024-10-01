@@ -67,6 +67,8 @@ namespace ead_backend
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IVendorRatingService, VendorRatingService>();
+
 
             // Add CORS policy to allow frontend to access API
             services.AddCors(options =>
