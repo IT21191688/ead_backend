@@ -12,5 +12,7 @@ namespace ead_backend.Services
         Task<bool> DeleteProductAsync(string productId, string vendorId);
         Task<IEnumerable<ProductDto>> GetAllProductsAsync();
         Task<ProductDto> GetProductByIdAsync(string productId);
+
+        Task<List<ProductDto>> GetAllProductsByVendorAsync(string vendorId);
     }
 }

@@ -17,6 +17,7 @@ namespace ead_backend.Model.Dtos
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public CategoryDto Category { get; set; } // Include category details
+        public UserDto Vendor { get; set; }
     }
 
     public class ProductCreateDto
