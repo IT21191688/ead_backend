@@ -22,6 +22,7 @@ namespace ead_backend.Services
         Task<User> CreateUserAsync(UserDto userDto);
         Task<User> AuthenticateUserAsync(string email, string password);
         Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByIdAsync(string userId);
         Task<User> UpdateUserAsync(string email, UserUpdateDto userUpdateDto);
         Task<bool> ChangePasswordAsync(string email, string currentPassword, string newPassword);
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
@@ -29,5 +30,9 @@ namespace ead_backend.Services
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<bool> IsUserAdminAsync(string email);
         Task<bool> DeleteUserAsync(string email);
+        Task<User> UpdateUserStatusAsync(string userId, string status);
+
+
+
     }
 }

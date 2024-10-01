@@ -36,6 +36,7 @@ namespace ead_backend.Controllers
 
             var userDto = new UserDto
             {
+                id=user.Id.ToString(),
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -60,6 +61,7 @@ namespace ead_backend.Controllers
 
             var userDto = new UserDto
             {
+                id=updatedUser.Id.ToString(),
                 FirstName = updatedUser.FirstName,
                 LastName = updatedUser.LastName,
                 Email = updatedUser.Email,
@@ -142,5 +144,44 @@ namespace ead_backend.Controllers
 
             return this.CustomResponse(true, 200, "User deleted successfully", null);
         }
+
+        [HttpPut("update-status/{userId}")]
+        public async Task<IActionResult> UpdateUserStatus(string userId, [FromBody] UpdateStatusDto updateStatusDto)
+        {
+            if (string.IsNullOrEmpty(updateStatusDto?.Status))
+            {
+                return this.CustomResponse(false, 400, "The status field is required.", null);
+            }
+
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return this.CustomResponse(false, 404, "User not found", null);
+            }
+
+            user.Status = updateStatusDto.Status;
+
+            var updatedUser = await _userService.UpdateUserStatusAsync(userId, updateStatusDto.Status);
+
+            if (updatedUser == null)
+            {
+                return this.CustomResponse(false, 500, "Failed to update user status", null);
+            }
+            var userDto = new UserDto
+            {
+                id =updatedUser.Id.ToString(),
+                FirstName = updatedUser.FirstName,
+                LastName = updatedUser.LastName,
+                Email = updatedUser.Email,
+                Age = updatedUser.Age,
+                Role = updatedUser.Role,
+                Status = updatedUser.Status,
+            };
+
+            return this.CustomResponse(true, 200, "User status updated successfully", userDto);
+        }
+
+
+
     }
 }

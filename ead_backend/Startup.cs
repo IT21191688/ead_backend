@@ -68,6 +68,8 @@ namespace ead_backend
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IVendorRatingService, VendorRatingService>();
+
 
             services.AddControllers();
         }
