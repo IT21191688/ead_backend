@@ -13,6 +13,6 @@ namespace ead_backend.Services
         Task<IEnumerable<ProductDto>> GetAllProductsAsync();
         Task<ProductDto> GetProductByIdAsync(string productId);
 
-        Task<List<Product>> GetAllProductsByVendorAsync(string vendorId);
+        Task<List<ProductDto>> GetAllProductsByVendorAsync(string vendorId);
     }
 }
