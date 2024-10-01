@@ -217,5 +217,14 @@ namespace ead_backend.Services.ServiceImpl
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
             return uploadResult.SecureUrl.ToString();
         }
+
+        public async Task<List<Product>> GetAllProductsByVendorAsync(string vendorId)
+        {
+            // Filter products by vendorId
+            var filter = Builders<Product>.Filter.Eq(p => p.VendorId, vendorId);
+            var products = await _products.Find(filter).ToListAsync();
+
+            return products;
+        }
     }
 }
