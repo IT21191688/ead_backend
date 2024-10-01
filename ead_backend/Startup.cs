@@ -35,20 +35,20 @@ namespace ead_backend
             // JWT Authentication Configuration
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
-            ValidateIssuer = true,
-            ValidIssuer = Configuration["Jwt:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = Configuration["Jwt:Audience"],
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             services.AddAuthorization(options =>
             {
@@ -59,7 +59,6 @@ namespace ead_backend
             });
 
             services.AddScoped<IEmailService, EmailService>();
-
             services.AddScoped<JwtHelper>();
 
             // Add services for dependency injection
@@ -68,6 +67,17 @@ namespace ead_backend
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IOrderService, OrderService>();
+
+            // Add CORS policy to allow frontend to access API
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", builder =>
+                {
+                    builder.WithOrigins("http://localhost:5173")  // Replace with your frontend origin
+                           .AllowAnyHeader()                       // Allow any headers (e.g., for tokens)
+                           .AllowAnyMethod();                      // Allow any HTTP method (GET, POST, PUT, DELETE)
+                });
+            });
 
             services.AddControllers();
         }
@@ -80,6 +90,10 @@ namespace ead_backend
             }
 
             app.UseRouting();
+
+            // Apply CORS policy before Authentication & Authorization
+            app.UseCors("AllowFrontend");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
