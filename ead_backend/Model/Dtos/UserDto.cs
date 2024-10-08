@@ -1,4 +1,8 @@
-﻿namespace ead_backend.Model.Dtos
+﻿// File: UserDto
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+namespace ead_backend.Model.Dtos
 {
     public class UserDto
     {

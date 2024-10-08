@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// File: UserController
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description: Handle all api user apis
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -146,6 +151,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPut("update-status/{userId}")]
+        [Authorize(Roles = "csr")]
         public async Task<IActionResult> UpdateUserStatus(string userId, [FromBody] UpdateStatusDto updateStatusDto)
         {
             if (string.IsNullOrEmpty(updateStatusDto?.Status))

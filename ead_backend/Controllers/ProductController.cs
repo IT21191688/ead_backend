@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// File: ProductController
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description: Handle All Product apis
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -72,7 +77,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpDelete("delete-product/{productId}")]
-        [Authorize(Roles = "vendor")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> DeleteProduct(string productId)
         {
             var vendorEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

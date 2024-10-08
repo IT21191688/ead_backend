@@ -1,4 +1,9 @@
-﻿using ead_backend.Healpers;
+﻿// File: AuthService
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+using ead_backend.Healpers;
 using ead_backend.Model.Dtos;
 using System.Threading.Tasks;
 

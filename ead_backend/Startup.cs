@@ -1,4 +1,9 @@
-﻿using ead_backend.Data;
+﻿// File: Startup
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+using ead_backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

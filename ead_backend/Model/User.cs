@@ -1,4 +1,8 @@
-﻿using MongoDB.Bson;
+﻿// File: User
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace ead_backend.Model

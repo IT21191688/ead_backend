@@ -1,4 +1,10 @@
-﻿using ead_backend.Model.Dtos;
+﻿// File: VendorRatingController
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+
+using ead_backend.Model.Dtos;
 using ead_backend.Services;
 using ead_backend.Utills;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +29,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPost("create-vendor-rating")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateVendorRating([FromBody] VendorRatingCreateDto vendorRatingCreateDto)
         {
             var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -45,6 +52,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("vendor-rating-get-by-vendor-id/{vendorId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetRatingsByVendorId(string vendorId)
         {
             var ratings = await _vendorRatingService.GetRatingsByVendorIdAsync(vendorId);
@@ -52,6 +60,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("all-ratings")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllRatings()
         {
             var ratings = await _vendorRatingService.GetAllRatingsAsync();
@@ -59,6 +68,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("vendor-rating-by-customer-id/{customerId}")]
+
         public async Task<IActionResult> GetRatingsByCustomerId(string customerId)
         {
             var ratings = await _vendorRatingService.GetRatingsByCustomerIdAsync(customerId);

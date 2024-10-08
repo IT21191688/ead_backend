@@ -1,4 +1,9 @@
-﻿namespace ead_backend.Services
+﻿// File: IEmailService
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+namespace ead_backend.Services
 {
     public interface IEmailService
     {

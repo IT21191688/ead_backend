@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// File: CategoryController
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description: category api call handling
+
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using ead_backend.Services;

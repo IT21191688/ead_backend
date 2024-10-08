@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// File: ProductDto
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+using Microsoft.AspNetCore.Http;
 using System;
 
 namespace ead_backend.Model.Dtos

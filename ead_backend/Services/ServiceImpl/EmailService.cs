@@ -1,4 +1,9 @@
-﻿using System.Net;
+﻿// File: EmailService
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 

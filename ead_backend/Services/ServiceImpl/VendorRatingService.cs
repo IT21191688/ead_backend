@@ -1,4 +1,9 @@
-﻿using ead_backend.Data;
+﻿// File: VendorRatingService
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+using ead_backend.Data;
 using ead_backend.Model;
 using ead_backend.Model.Dtos;
 using MongoDB.Bson;

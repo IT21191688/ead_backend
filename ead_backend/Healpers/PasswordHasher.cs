@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿// File: PasswordHasher
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description:
+
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 
 namespace ead_backend.Healpers

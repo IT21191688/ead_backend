@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// File: OrderController
+// Author: M.W.H.S.L Ruwanpura
+// IT Number: IT21191688
+// Description: Handle order api
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,6 +28,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPost("create-order")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto)
         {
             var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -44,6 +50,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("get-order-by-id/{orderId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetOrder(string orderId)
         {
             var order = await _orderService.GetOrderByIdAsync(orderId);
@@ -57,6 +64,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("get-customer-orders")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCustomerOrders()
         {
             var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -101,6 +109,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("get-all-orders")]
+        [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> getAllOrders()
         {
             var orders = await _orderService.GetAllOrdersAsync();
