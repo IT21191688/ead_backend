@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using ead_backend.Services;
 using ead_backend.Model.Dtos;
 using ead_backend.Utills;
+using Microsoft.Extensions.Logging;
 
 namespace ead_backend.Controllers
 {
@@ -20,11 +21,14 @@ namespace ead_backend.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
+        private readonly AuthService authService;
+        private readonly IEmailService _emailService;
 
-        public OrderController(IOrderService orderService, IUserService userService)
+        public OrderController(IOrderService orderService, IUserService userService,AuthService _authService)
         {
             _orderService = orderService;
             _userService = userService;
+            authService = _authService;
         }
 
         [HttpPost("create-order")]
@@ -80,19 +84,60 @@ namespace ead_backend.Controllers
             return this.CustomResponse(true, 200, "Customer orders retrieved successfully", orders);
         }
 
+        //[HttpPut("update-order-status/{orderId}")]
+        //[Authorize(Policy = "VendorOrAdmin")]
+        //public async Task<IActionResult> UpdateOrderStatus(string orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
+        //{
+        //    var updatedOrder = await _orderService.UpdateOrderStatusAsync(orderId, updateOrderStatusDto.OrderStatus);
+
+        //    if (updateOrderStatusDto.OrderStatus== "request_cancel")
+        //    {
+
+
+        //    }
+
+        //    if (updatedOrder == null)
+        //    {
+        //        return this.CustomResponse(false, 404, "Order not found", null);
+        //    }
+
+        //    return this.CustomResponse(true, 200, "Order status updated successfully", updatedOrder);
+        //}
+
         [HttpPut("update-order-status/{orderId}")]
         [Authorize(Policy = "VendorOrAdmin")]
         public async Task<IActionResult> UpdateOrderStatus(string orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
         {
+            // Update the order status
             var updatedOrder = await _orderService.UpdateOrderStatusAsync(orderId, updateOrderStatusDto.OrderStatus);
 
+            // Check if the updated order is null
             if (updatedOrder == null)
             {
                 return this.CustomResponse(false, 404, "Order not found", null);
             }
 
+            // If the order status is "request_cancel", proceed to send email to CSR
+            //if (updateOrderStatusDto.OrderStatus.Equals("request_cancel", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    // Fetch CSR users
+            //    var csrUsers = await authService.GetCsrEmailsAsync();
+            //    foreach (var csrUser in csrUsers)
+            //    {
+            //        string fullName = updatedOrder.Customer.FirstName; // Assuming FirstName is a property of the Customer model
+            //        string userEmail = updatedOrder.Customer.Email; // Assuming Email is a property of the Customer model
+
+            //        // Send the cancellation request email
+            //        await _emailService.SendOrderCancellationRequestEmailAsync(csrUser, fullName, userEmail);
+            //    }
+            //}
+
+            // Return success response
             return this.CustomResponse(true, 200, "Order status updated successfully", updatedOrder);
         }
+
+
+
 
         [HttpPut("update-order-item-status/{orderId}/items/{orderItemId}")]
         [Authorize(Policy = "VendorOrAdmin")]

@@ -11,5 +11,6 @@ namespace ead_backend.Services
         Task SendOrderStatusEmailAsync(string email, string orderId, string status);
         Task SendPasswordResetEmailAsync(string email, string token);
         Task SendActivationRequestToCSREmailAsync(string csrEmail, string fullName, string userEmail);
+        Task SendOrderCancellationRequestEmailAsync(string csrEmail, string fullName, string userEmail);
     }
 }
