@@ -33,6 +33,14 @@ namespace ead_backend.Controllers
                 // Send a registration confirmation email
                 await _emailService.SendUserRegisteredEmailAsync(userDetails.Email, userDetails.FirstName + " " + userDetails.LastName);
 
+                var csrEmails = await _authService.GetCsrEmailsAsync();
+
+                // Send activation request email to each CSR
+                foreach (var csrEmail in csrEmails)
+                {
+                    await _emailService.SendActivationRequestToCSREmailAsync(csrEmail, userDetails.FirstName + " " + userDetails.LastName, userDetails.Email);
+                }
+
                 return this.CustomResponse(true, 201, message, userDetails);
             }
             else

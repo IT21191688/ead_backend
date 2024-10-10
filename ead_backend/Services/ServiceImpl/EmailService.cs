@@ -106,5 +106,27 @@ namespace ead_backend.Services.ServiceImpl
             var message = CreateEmailMessage(email, subject, body);
             await SendAsync(message);
         }
+
+        public async Task SendActivationRequestToCSREmailAsync(string csrEmail, string fullName, string userEmail)
+        {
+            var subject = $"Activation Request for New User: {fullName}";
+            var body = $@"
+    <html>
+    <body style='font-family: Arial, sans-serif; color: #333;'>
+        <div style='max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px;'>
+            <h1 style='text-align: center; color: #FFA500;'>New User Activation Request</h1>
+            <p style='font-size: 18px; text-align: center;'>A new user <b>{fullName}</b> has registered with the email <b>{userEmail}</b>.</p>
+            <p style='font-size: 16px;'>Please review and activate the user in the system.</p>
+            <p style='font-size: 16px;'>Best regards,<br>E-Com Admin Team</p>
+            <hr style='border: none; border-top: 1px solid #ddd;'>
+            <p style='font-size: 12px; color: #aaa; text-align: center;'>This email is sent to notify you of a new user registration.</p>
+        </div>
+    </body>
+    </html>";
+
+            var message = CreateEmailMessage(csrEmail, subject, body);
+            await SendAsync(message);
+        }
+
     }
 }

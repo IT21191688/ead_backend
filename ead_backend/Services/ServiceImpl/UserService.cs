@@ -167,6 +167,15 @@ namespace ead_backend.Services.ServiceImpl
             return user;
         }
 
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync()
+        {
+            var role = "csr";
+
+            return await _users.Find(u => u.Role.ToLower() == role.ToLower()).ToListAsync();
+        }
+
+
+
 
     }
 }

@@ -4,6 +4,7 @@
 // Description:
 
 using ead_backend.Healpers;
+using ead_backend.Model;
 using ead_backend.Model.Dtos;
 using System.Threading.Tasks;
 
@@ -54,8 +55,20 @@ namespace ead_backend.Services
                 Role = user.Role,
                 Status = user.Status,
             };
-
             return (true, "Login successful.", token, userDetails);
         }
+
+
+        public async Task<List<string>> GetCsrEmailsAsync()
+        {
+            // Get the list of users with the CSR role
+            var users = await _userService.GetUsersByRoleAsync();
+
+            // Extract the emails from the list of User objects
+            var csrEmails = users.Select(u => u.Email).ToList();
+            return csrEmails;
+        }
+
+
     }
 }
