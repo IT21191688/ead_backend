@@ -127,7 +127,7 @@ namespace ead_backend.Services.ServiceImpl
             var message = CreateEmailMessage(csrEmail, subject, body);
             await SendAsync(message);
         }
-        public async Task SendOrderCancellationRequestEmailAsync(string csrEmail, string fullName, string userEmail)
+        public async Task SendOrderCancellationRequestEmailAsync(string orderId,string csrEmail, string fullName, string userEmail)
         {
             var subject = $"Order Cancellation Request";
             var body = $@"
@@ -135,7 +135,7 @@ namespace ead_backend.Services.ServiceImpl
     <body style='font-family: Arial, sans-serif; color: #333;'>
         <div style='max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px;'>
             <h1 style='text-align: center; color: #FF6347;'>Order Cancellation Request</h1>
-            <p style='font-size: 18px; text-align: center;'>A request has been made to cancel order ID <b></b>.</p>
+            <p style='font-size: 18px; text-align: center;'>A request has been made to cancel order ID {orderId} <b></b>.</p>
             <p style='font-size: 18px; text-align: center;'>Requested by <b>{fullName}</b> with the email <b>{userEmail}</b>.</p>
             <p style='font-size: 16px;'>Please review and process the cancellation as soon as possible.</p>
             <p style='font-size: 16px;'>Best regards,<br>E-Com Admin Team</p>

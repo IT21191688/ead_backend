@@ -151,7 +151,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpPut("update-status/{userId}")]
-        [Authorize(Roles = "csr")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateUserStatus(string userId, [FromBody] UpdateStatusDto updateStatusDto)
         {
             if (string.IsNullOrEmpty(updateStatusDto?.Status))
