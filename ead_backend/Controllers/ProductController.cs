@@ -107,7 +107,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("get-all-products-by-vendor")]
-        [Authorize(Roles = "vendor")]
+        [Authorize(Roles = "VendorOrAdminOrCsr")]
         public async Task<IActionResult> GetAllProductsByVendor()
         { 
             var vendorIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");

@@ -121,7 +121,7 @@ namespace ead_backend.Controllers
         }
 
         [HttpGet("get-all-users")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Policy = "VendorOrAdminOrCsr")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();

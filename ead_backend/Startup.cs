@@ -61,6 +61,11 @@ namespace ead_backend
                     policy.RequireAssertion(context =>
                         context.User.HasClaim(c =>
                             (c.Type == ClaimTypes.Role && (c.Value == "vendor" || c.Value == "admin")))));
+
+                options.AddPolicy("VendorOrAdminOrCsr", policy =>
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim(c =>
+                            (c.Type == ClaimTypes.Role && (c.Value == "vendor" || c.Value == "admin" || c.Value=="csr")))));
             });
 
             services.AddScoped<IEmailService, EmailService>();
